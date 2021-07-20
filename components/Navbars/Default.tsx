@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
+import PropTypes from 'prop-types';
 
-const Navbar = ({ changeSelectedPokemon }) => {
+const Navbar = ({ changeSelectedPokemon }: { changeSelectedPokemon(id: string): void }): JSX.Element => {
     const [pokemonName, setPokemonName] = useState('');
 
     const updatePokemonName = (e) => {
@@ -50,6 +51,10 @@ const Navbar = ({ changeSelectedPokemon }) => {
             </nav>
         </Fragment>
     );
+};
+
+Navbar.propTypes = {
+    changeSelectedPokemon: PropTypes.func.isRequired,
 };
 
 export default Navbar;

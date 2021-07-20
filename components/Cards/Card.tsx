@@ -1,7 +1,16 @@
 import React, { Fragment } from 'react';
+import { pokemonPartial } from '../../interfaces/';
 import PropTypes from 'prop-types';
 
-const Card = ({ pokemon, index, changeSelectedPokemon }) => {
+const Card = ({
+    pokemon,
+    index,
+    changeSelectedPokemon,
+}: {
+    pokemon: pokemonPartial;
+    index: number;
+    changeSelectedPokemon(id: string): void;
+}): JSX.Element => {
     return (
         <Fragment>
             <div className="max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-8  mb-2 card mx-auto w-full">
@@ -17,7 +26,7 @@ const Card = ({ pokemon, index, changeSelectedPokemon }) => {
                     <a
                         href="#"
                         className="text-xl font-medium text-red-500"
-                        onClick={() => changeSelectedPokemon(index)}
+                        onClick={() => changeSelectedPokemon(index.toString())}
                     >
                         Details
                     </a>

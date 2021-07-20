@@ -1,16 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import CardDetail from '../components/Cards/Detail';
 import Footer from '../components/Footers/Default';
 import Navbar from '../components/Navbars/Default';
 import PokemonList from '../components/Containers/PokemonList';
 import { getPokemon } from '../services/api/pokedex';
+import { pokemonPartial, detailPokemon, listPokemon } from '../interfaces/';
+import { GetStaticProps } from 'next';
+import PropTypes from 'prop-types';
 const publicApi = process.env.NEXT_PUBLIC_PUBLIC_API;
 
-export default function Home({ listPokemons, defaultPokemon }) {
-    const [selectedPokemon, setSelectedPokemon] = useState(null);
+export default function Home({
+    listPokemons,
+    defaultPokemon,
+}: {
+    listPokemons: pokemonPartial[];
+    defaultPokemon: detailPokemon;
+}): JSX.Element {
+    const [selectedPokemon, setSelectedPokemon] = useState<detailPokemon>(null);
 
-    const changeSelectedPokemon = async (id) => {
+    const changeSelectedPokemon = async (id: string) => {
         try {
             const res = await getPokemon(id);
             if (res.data) {
@@ -41,9 +50,14 @@ export default function Home({ listPokemons, defaultPokemon }) {
     );
 }
 
-export const getStaticProps = async () => {
-    const listPokemons = await fetch(`${publicApi}pokemon`).then((response) => response.json());
-    const defaultPokemon = await fetch(`${publicApi}pokemon/25`).then((response) => response.json());
+Home.propTypes = {
+    listPokemons: PropTypes.array.isRequired,
+    defaultPokemon: PropTypes.object.isRequired,
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+    const listPokemons: listPokemon = await fetch(`${publicApi}pokemon`).then((response) => response.json());
+    const defaultPokemon: detailPokemon = await fetch(`${publicApi}pokemon/25`).then((response) => response.json());
     if (listPokemons?.results) {
         listPokemons.results.forEach((el, index) => {
             el.image = `https://pokeres.bastionbot.org/images/pokemon/${index + 1}.png`;
@@ -53,6 +67,6 @@ export const getStaticProps = async () => {
         defaultPokemon.image = `https://pokeres.bastionbot.org/images/pokemon/25.png`;
     }
     return {
-        props: { listPokemons, defaultPokemon },
+        props: { listPokemons: listPokemons.results, defaultPokemon },
     };
 };

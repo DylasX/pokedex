@@ -1,7 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { detailPokemon } from '../../interfaces/';
 
-const CardDetail = ({ defaultPokemon, selectedPokemon }) => {
+const CardDetail = ({
+    defaultPokemon,
+    selectedPokemon,
+}: {
+    defaultPokemon: detailPokemon;
+    selectedPokemon: detailPokemon;
+}): JSX.Element => {
     const pokemon = selectedPokemon || defaultPokemon;
     return (
         <Fragment>
@@ -23,9 +30,9 @@ const CardDetail = ({ defaultPokemon, selectedPokemon }) => {
                 <div className="types mt-4">
                     <ul className="text-center">
                         <h4>Types</h4>
-                        {pokemon.types.map((row, index) => (
+                        {pokemon.types.map((data: Record<string, { name: string }>, index) => (
                             <li key={index} className="capitalize">
-                                {row.type.name}
+                                {data.type.name}
                             </li>
                         ))}
                     </ul>
